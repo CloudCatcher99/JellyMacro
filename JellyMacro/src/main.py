@@ -63,10 +63,10 @@ def main():
         DISCORD_WEBHOOK.start()
     
     # Connect engine signals
-    ENGINE.on_state_change = window.on_engine_state_change
-    ENGINE.on_action_execute = window.on_action_execute
-    ENGINE.on_log = window.on_log
-    ENGINE.on_screenshot = window.on_screenshot
+    ENGINE.on_state_change = window._on_engine_state_change
+    ENGINE.on_action_execute = window._on_engine_action_execute
+    ENGINE.on_log = window._on_engine_log
+    ENGINE.on_screenshot = window._on_engine_screenshot
     
     # Start event loop
     sys.exit(app.exec())
