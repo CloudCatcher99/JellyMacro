@@ -5,6 +5,7 @@ Action models for JellyMacro - defines all action types and their properties
 from dataclasses import dataclass, field, asdict
 from typing import Optional, List, Dict, Any, Union
 from enum import Enum
+from pathlib import Path
 import uuid
 import time
 
@@ -330,3 +331,86 @@ def create_counter_action(counter_name: str, image_path: str,
         name=name or f"Counter: {counter_name}",
         data=data.__dict__
     )
+
+
+def create_action_with_prompt(action_type: ActionType, action_name: str = "") -> Optional[Action]:
+    """Create an action, optionally prompting for details"""
+    
+    if action_type == ActionType.CLICK:
+        data = ClickActionData()
+        return Action(type=action_type, name=action_name or "Click", data=data.__dict__)
+    
+    elif action_type == ActionType.DOUBLE_CLICK:
+        data = ClickActionData(click_type=ClickType.DOUBLE)
+        return Action(type=action_type, name=action_name or "Double Click", data=data.__dict__)
+    
+    elif action_type == ActionType.RIGHT_CLICK:
+        data = ClickActionData(click_type=ClickType.RIGHT)
+        return Action(type=action_type, name=action_name or "Right Click", data=data.__dict__)
+    
+    elif action_type in (ActionType.KEY_PRESS, ActionType.KEY_HOLD, ActionType.KEY_RELEASE):
+        data = KeyActionData()
+        return Action(type=action_type, name=action_name or f"{action_type.value}", data=data.__dict__)
+    
+    elif action_type == ActionType.TYPE_TEXT:
+        data = {"text": "", "interval": 0.05}
+        return Action(type=action_type, name=action_name or "Type Text", data=data)
+    
+    elif action_type in (ActionType.MOUSE_MOVE, ActionType.MOUSE_DRAG):
+        data = {
+            "start_x": 0, "start_y": 0,
+            "end_x": 0, "end_y": 0,
+            "relative": True, "duration": 0.5
+        }
+        return Action(type=action_type, name=action_name or "Mouse Move", data=data)
+    
+    elif action_type == ActionType.WAIT:
+        data = WaitActionData()
+        return Action(type=action_type, name=action_name or "Wait", data=data.__dict__)
+    
+    elif action_type == ActionType.WAIT_IMAGE:
+        data = ImageActionData()
+        return Action(type=action_type, name=action_name or "Wait for Image", data=data.__dict__)
+    
+    elif action_type in (ActionType.IF_IMAGE, ActionType.IF_NOT_IMAGE, ActionType.FIND_IMAGE):
+        data = ImageActionData()
+        return Action(type=action_type, name=action_name or f"{action_type.value}", data=data.__dict__)
+    
+    elif action_type == ActionType.LOOP_START:
+        data = LoopActionData()
+        return Action(type=action_type, name=action_name or "Loop Start", data=data.__dict__)
+    
+    elif action_type == ActionType.LOOP_END:
+        data = LoopActionData()
+        return Action(type=action_type, name=action_name or "Loop End", data=data.__dict__)
+    
+    elif action_type == ActionType.BREAK:
+        return Action(type=action_type, name=action_name or "Break")
+    
+    elif action_type == ActionType.CONTINUE:
+        return Action(type=action_type, name=action_name or "Continue")
+    
+    elif action_type == ActionType.SET_VARIABLE:
+        data = VariableActionData()
+        return Action(type=action_type, name=action_name or "Set Variable", data=data.__dict__)
+    
+    elif action_type == ActionType.IF_VARIABLE:
+        data = VariableActionData()
+        return Action(type=action_type, name=action_name or "If Variable", data=data.__dict__)
+    
+    elif action_type == ActionType.COUNTER_CHECK:
+        data = CounterActionData()
+        return Action(type=action_type, name=action_name or "Counter Check", data=data.__dict__)
+    
+    elif action_type == ActionType.SCREENSHOT:
+        return Action(type=action_type, name=action_name or "Screenshot")
+    
+    elif action_type == ActionType.DISCORD_SEND:
+        data = {"message": "", "embed": True}
+        return Action(type=action_type, name=action_name or "Discord Send", data=data)
+    
+    elif action_type == ActionType.CUSTOM:
+        data = {"code": ""}
+        return Action(type=action_type, name=action_name or "Custom", data=data)
+    
+    return None

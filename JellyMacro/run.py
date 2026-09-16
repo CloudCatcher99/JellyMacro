@@ -8,8 +8,12 @@ import sys
 import os
 from pathlib import Path
 
+# Add current directory to path
+current_dir = Path(__file__).parent
+sys.path.insert(0, str(current_dir))
+
 # Add src to path
-src_path = Path(__file__).parent / "src"
+src_path = current_dir / "src"
 sys.path.insert(0, str(src_path))
 
 from src.main import main
