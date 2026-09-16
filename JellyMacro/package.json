@@ -1,0 +1,27 @@
+{
+    "name": "JellyMacro",
+    "version": "1.0.0",
+    "description": "Advanced macro automation tool for Roblox",
+    "author": "Xeu",
+    "main": "src/main.py",
+    "scripts": {
+        "start": "python src/main.py",
+        "build": "pyinstaller --clean build/jellymacro.spec",
+        "install": "pip install -r requirements.txt"
+    },
+    "dependencies": {
+        "PySide6": "6.7.0",
+        "opencv-python": "4.10.0.84",
+        "numpy": "1.26.4",
+        "pyautogui": "0.9.54",
+        "pynput": "1.7.6",
+        "Pillow": "10.4.0",
+        "requests": "2.32.3"
+    },
+    "build": {
+        "app_name": "JellyMacro",
+        "icon": "assets/icons/jellymacro.ico",
+        "window_size": [1200, 900],
+        "canvas_size": [800, 800]
+    }
+}
